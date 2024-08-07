@@ -4,6 +4,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { User } from './users.model';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/roles-auth.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @ApiTags('Пользователи')
 @Controller('users')
@@ -12,6 +14,8 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Создать пользователя' })
   @ApiResponse({ status: 200, type: User })
+  @Roles('ADMIN')
+  @UseGuards(RolesGuard)
   @Post()
   create(@Body() userDto: CreateUserDto) {
     return this.usersService.createUser(userDto);
