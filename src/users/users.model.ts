@@ -3,11 +3,13 @@ import {
   BelongsToMany,
   Column,
   DataType,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { Role } from '../roles/roles.model';
 import { UserRoles } from '../roles/user-roles.model';
+import { Post } from '../posts/posts.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -41,6 +43,11 @@ export class User extends Model<User, UserCreationAttrs> {
   @Column({ type: DataType.STRING, allowNull: true })
   banReason: string;
 
+  @ApiProperty({ example: '[ADMIN]', description: 'Роли пользователя' })
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
+
+  @ApiProperty({ description: 'Посты пользователя' })
+  @HasMany(() => Post)
+  posts: Post[];
 }
